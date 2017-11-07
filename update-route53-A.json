@@ -1,0 +1,19 @@
+{
+  "Comment": "Update the A record set",
+  "Changes": [
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "YOUR_DNS_A_RECORD",
+        "Type": "A",
+        "TTL": 60,
+        "ResourceRecords": [
+          {
+            "Value": "127.0.0.1"
+          }
+        ]
+      }
+    }
+  ]
+}
+
