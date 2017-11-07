@@ -1,6 +1,8 @@
 # update53-pub
 Update Route 53 DNS Record with your current public IP (Usefull for home setupbox with non-static IP address from your ISP)
 
+Adaptation from : [Lambros Petrou](https://www.lambrospetrou.com/articles/aws-update-route53-recordset-diy-load-balancer/)
+
 ## Install
 
 - git clone https://github.com/z0ph/update53-pub.git
