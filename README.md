@@ -1,8 +1,12 @@
 # DynDNS - update53 
 
-Update Route 53 DNS Record with your current public IP (Usefull for home ISP with non-static IP address)
+Update AWS Route 53 DNS Record with your current public IP (Usefull for home ISP with non-static IP address)
 
-Adaptation from : [Lambros Petrou](https://www.lambrospetrou.com/articles/aws-update-route53-recordset-diy-load-balancer/)
+Adaptation from: [Lambros Petrou](https://www.lambrospetrou.com/articles/aws-update-route53-recordset-diy-load-balancer/)
+
+There is two versions : 
+- Update53-pub.sh to update form a Linux box, RaspberryPi, macOS...
+- Update53-EC2pub.sh to update from EC2 instance
 
 ## Requierements
 
@@ -11,10 +15,10 @@ Adaptation from : [Lambros Petrou](https://www.lambrospetrou.com/articles/aws-up
 
 ## Installation (Update53-pub.sh version)
 
-This version allow you to update your route53 record from your current public ip (from ifconfig.co webservice)
+This version allow you to update your aws route53 record from your current public ip (from ifconfig.co webservice)
 
 - `git clone https://github.com/z0ph/update53-pub.git`
-- Create your Route 53 Zone, and your DNS A Record to update
+- Create your AWS Route 53 Zone, and your DNS A Record to update
 - Configure your server with AWS CLI : `aws configure`
 
 ## Installation (Update53-EC2pub.sh version)
