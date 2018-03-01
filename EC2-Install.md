@@ -39,7 +39,3 @@ rm -rf /home/ec2-user/update53/
 Change with your values in `config.json`:
 
 - `YOUR_DNS_A_RECORD_NAME` : Line 7 - Example: home.example.com
-
-## Setup exec permission
-
-- `chmod +x update53-EC2pub.sh`

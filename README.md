@@ -31,7 +31,6 @@ Change with your values:
 
 ## Run
 
-- `chmod +x update53-pub.sh`
 - Schedule this script with cron to update record on a daily basis for example.
 - `crontab -e` to schedule your job : 
 
