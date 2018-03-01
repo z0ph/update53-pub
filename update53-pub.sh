@@ -9,7 +9,7 @@ IP=$( curl -s https://v4.ifconfig.co/ )
 MYDOM=$( cat config.json|grep "Name"|awk -F : '{print  $2}'|tr -d '", ' )
 
 # Parent Domain assignment
-MYPARENTDOM=$( $MYDOM | awk -F . '{print $2"."$3}' )
+MYPARENTDOM=$( echo $MYDOM | awk -F . '{print $2"."$3}' )
 
 # Check current route53 DNS A record
 OLDIP=$( dig +short $MYDOM )

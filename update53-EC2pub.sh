@@ -7,7 +7,7 @@ DATE=`date '+%Y-%m-%d-%H:%M:%S'`
 MYDOM=$( cat config.json|grep "Name"|awk -F : '{print  $2}'|tr -d '", ' )
 
 # Parent Domain assignment
-MYPARENTDOM=$( $MYDOM | awk -F . '{print $2"."$3}' )
+MYPARENTDOM=$( echo $MYDOM | awk -F . '{print $2"."$3}' )
 
 if [ -z "$1" ]; then 
     echo "$DATE - IP not given...trying EC2 metadata...";
