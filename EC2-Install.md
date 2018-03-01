@@ -6,7 +6,7 @@ Adaptation from: [Lambros Petrou](https://www.lambrospetrou.com/articles/aws-upd
 
 There is two versions: 
 - Update53-pub.sh to update form a Linux box, RaspberryPi, macOS...
-- Update53-EC2pub.sh to update from EC2 instance: please follow this (installation instructions)[EC2-Install.md]
+- Update53-EC2pub.sh to update from EC2 instance
 
 ## Requierements
 
