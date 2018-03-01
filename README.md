@@ -4,7 +4,7 @@ Update AWS Route 53 DNS Record with your current public IP (Usefull for home ISP
 
 Adaptation from: [Lambros Petrou](https://www.lambrospetrou.com/articles/aws-update-route53-recordset-diy-load-balancer/)
 
-There is two versions : 
+There is two versions: 
 - Update53-pub.sh to update form a Linux box, RaspberryPi, macOS...
 - Update53-EC2pub.sh to update from EC2 instance
 

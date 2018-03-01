@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Check current public IP using ifconfig.co webservice
-IP=$( curl -s https://ifconfig.co )
+IP=$( curl -s https://v4.ifconfig.co/ )
 
 # Check current route 53 DNS A record
 OLDIP=$( dig +short YOU_DNS_A_RECORD_NAME )
