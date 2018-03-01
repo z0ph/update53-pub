@@ -22,7 +22,7 @@ With this script, it will get the current IPv4 public IP from instance metadata,
 - Create your Route 53 Zone, and your DNS A Record to update
 - Create a S3 bucket for your artifacts on the same AWS region
 - Configure your server with AWS CLI or a role to update route53 and read access to your bucket
-- Upload your `update-route53-A.json` and `update53-EC2pub.sh` to an S3 bucket (in a tar.bz2 for example)
+- Upload your configured (edit first, see config section below) `config.json` and `update53-EC2pub.sh` to an S3 bucket (in a tar.bz2 for example)
 - Setup your Launch Configuration of your ASG with the following UserData:
 
 ``` bash
@@ -36,18 +36,10 @@ rm -rf /home/ec2-user/update53/
 
 ## Config
 
-Edit `update53-pub.sh` and `update-route53-A.json`
-
-Change with your values in `update53-pub.sh`: 
-
-- `YOU_DNS_A_RECORD_NAME` : Line 7 - Example: home.example.com
-- `YOUR_PARENT_DNS_NAME` : Line 15 - Example: example.com
-
-Change with your values in `update-route53-A.json`:
+Change with your values in `config.json`:
 
 - `YOUR_DNS_A_RECORD_NAME` : Line 7 - Example: home.example.com
 
-## Run
+## Setup exec permission
 
-- `chmod +x update53-pub.sh`
-- Schedule this script with cron to update record on a daily basis for example.
+- `chmod +x update53-EC2pub.sh`
