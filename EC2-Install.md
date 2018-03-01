@@ -13,13 +13,26 @@ There is two versions:
 - AWSCLI
 - dig (dnsutils)
 
-## Installation (Update53-pub.sh version)
+## Installation (Update53-EC2pub.sh version)
 
-This version allow you to update your aws route53 record from your current public ip (from ifconfig.co webservice)
+This variant is for AWS EC2 Usage **Only**, it's usefull if you have an AutoScalingGroup (ASG), and you don't want to setup an ALB/ELB (Cost Saving).
+With this script, it will get the current IPv4 public IP from instance metadata, and update your route53 DNS record acordingly.
 
-- `git clone https://github.com/z0ph/update53-pub.git`
-- Create your AWS Route 53 Zone, and your DNS A Record to update (home.example.com)
-- Configure your server with AWS CLI : `aws configure` with your AccessKey
+- `git clone https://github.com/z0ph/update53-pub.git` (on your EC2 instance)
+- Create your Route 53 Zone, and your DNS A Record to update
+- Create a S3 bucket for your artifacts on the same AWS region
+- Configure your server with AWS CLI or a role to update route53 and read access to your bucket
+- Upload your `update-route53-A.json` and `update53-EC2pub.sh` to an S3 bucket (in a tar.bz2 for example)
+- Setup your Launch Configuration of your ASG with the following UserData:
+
+``` bash
+#!/bin/bash
+/usr/bin/aws s3 cp  s3://YOU_S3_BUCKET/update53.tar.bz2  /home/ec2-user/
+tar xjvf /home/ec2-user/update53.tar.bz2 -C /home/ec2-user/
+rm /home/ec2-user/update53.tar.bz2
+/bin/sh /home/ec2-user/update53/Update53-EC2pub.sh >> /home/ec2-user/update53.log
+rm -rf /home/ec2-user/update53/
+```
 
 ## Config
 
