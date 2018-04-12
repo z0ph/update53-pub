@@ -29,9 +29,15 @@ Change with your values:
 
 - `YOUR_DNS_A_RECORD_NAME` : Line 7 - Example: home.example.com
 
+Edit `update53-pub.sh` file
+
+Change `$MYJSONPATH` : Line 6 - Example: /home/zoph/update53-pub (without last `/`)
+
+Save
+
 ## Run
 
 - Schedule this script with cron to update record on a daily basis for example.
 - `crontab -e` to schedule your job : 
 
-`00 * * * * bash /home/user/update53-pub/update53-pub.sh >> /home/user/update53-pub/update.log`
+`0 * * * * bash /home/user/update53-pub/update53-pub.sh`
