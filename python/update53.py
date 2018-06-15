@@ -46,16 +46,6 @@ currentIp = getIp()
 date = datetime.datetime.now().strftime("%d-%m-%y-%H:%M")
 myRecord = args['dns']
 
-# Troubleshooting
-print 'Troubleshooting'
-print '---------'
-print (currentIp)
-print (hostedZoneId)
-print (date)
-print (myRecord)
-print '---------'
-
-
 #Check Hosted Zone ID
 try:
 	hz = r53.get_hosted_zone(
