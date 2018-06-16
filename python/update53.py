@@ -8,7 +8,7 @@ from botocore.exceptions import ClientError as BotoClientError
 import argparse
 import datetime
 
-__version__ = '0.1'
+__version__ = '0.2'
 __author__ = 'Victor GRENU'
 __license__ = "GPLv3+"
 __maintainer__ = "Victor GRENU"
@@ -53,7 +53,7 @@ try:
 	)
 
 except BotoClientError:
-	print("Hosted-Zone-ID " + hostedZoneId + " is incorrect.")
+	print(date + "- Hosted-Zone-ID " + hostedZoneId + " is incorrect.")
 	exit(1)
 
 # Get old IP from API Call (not DNS resolution)
@@ -66,7 +66,7 @@ try:
 )
 
 except BotoClientError:
-	print("A Record " + myRecord + " does not exist.")
+	print(date + "- A Record " + myRecord + " does not exist.")
 	exit(1)
 	
 # Set Variable oldIP
@@ -97,11 +97,11 @@ try:
               ]
       }
   )
-    print("Current IP: " +currentIp+ " was successfully updated to Route53")
+    print(date + "- Current IP: " +currentIp+ " was successfully updated to Route53")
   else:
-    print("Current IP: " +currentIp+ " is equal to old IP: " +oldIp+ ". Nothing to do.")
+    print(date + "- Current IP: " +currentIp+ " is equal to old IP: " +oldIp+ ". Nothing to do.")
   
 except BotoClientError:
-		print("Malformed IP:", currentIp)
+		print(date + "- Malformed IP:", currentIp)
 		exit(1)
 exit(0)
