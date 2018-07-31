@@ -4,16 +4,16 @@
 from sys import exit
 from requests import get
 import boto3
+import json
 from botocore.exceptions import ClientError as BotoClientError
 import argparse
 import datetime
 
-__version__ = '0.2'
+__version__ = '0.3'
 __author__ = 'Victor GRENU'
 __license__ = "GPLv3+"
 __maintainer__ = "Victor GRENU"
 __email__ = "victor.grenu@gmail.com"
-__status__ = "Production"
 
 # GetIp Fonction
 def getIp():
@@ -24,9 +24,17 @@ def getIp():
 
 # Arguements Parser
 parser = argparse.ArgumentParser(description="Update your AWS Route53 A record with your new IP address")
-parser.add_argument('-v', '--version', action='store_true', help='Print version and exit')
-parser.add_argument('id', help='AWS Route53\'s hosted-zone-id hosting your A record')
-parser.add_argument('dns', help='AWS Route53\'s A record you want to update')
+parser._action_groups.pop()
+required = parser.add_argument_group('required arguments')
+optional = parser.add_argument_group('optional arguments')
+
+# Required args
+required.add_argument('id', help='AWS Route53\'s hosted-zone-id hosting your A record')
+required.add_argument('dns', help='AWS Route53\'s A record you want to update')
+
+# Optional args
+optional.add_argument('bucket', help='S3 Bucket to update permissions (Bucket Policy)')
+optional.add_argument('-v', '--version', action='version', version="%(prog)s - "+ __version__ +"")
 
 args = vars(parser.parse_args())
 
@@ -46,14 +54,14 @@ currentIp = getIp()
 date = datetime.datetime.now().strftime("%d-%m-%y-%H:%M")
 myRecord = args['dns']
 
-#Check Hosted Zone ID
+# Check Hosted Zone ID
 try:
 	hz = r53.get_hosted_zone(
 		Id=hostedZoneId,
 	)
 
 except BotoClientError:
-	print(date + "- Hosted-Zone-ID " + hostedZoneId + " is incorrect.")
+	print(date + " - Hosted-Zone-ID " + hostedZoneId + " is incorrect.")
 	exit(1)
 
 # Get old IP from API Call (not DNS resolution)
@@ -66,7 +74,7 @@ try:
 )
 
 except BotoClientError:
-	print(date + "- A Record " + myRecord + " does not exist.")
+	print(date + " - A Record " + myRecord + " does not exist.")
 	exit(1)
 	
 # Set Variable oldIP
@@ -97,11 +105,51 @@ try:
               ]
       }
   )
-    print(date + "- Current IP: " +currentIp+ " was successfully updated to Route53")
+    print(date + " - Current IP: " +currentIp+ " was successfully updated to Route53")
+    
   else:
-    print(date + "- Current IP: " +currentIp+ " is equal to old IP: " +oldIp+ ". Nothing to do.")
+    print(date + " - Current IP: " +currentIp+ " is equal to old IP: " +oldIp+ ". Nothing to do with Route53.")
   
 except BotoClientError:
-		print(date + "- Malformed IP:", currentIp)
+		print(date + " - Malformed IP:", currentIp)
+		exit(1)
+
+# Try to update bucket policy
+try:
+  if oldIp != currentIp:
+    s3 = boto3.client('s3')
+    bucket_name = args['bucket']
+    # Create the bucket policy
+    bucket_policy = {
+    'Version': '2012-10-17',
+    'Statement': [{
+        'Sid': 'AddPerm',
+        'Effect': 'Allow',
+        'Principal': '*',
+        'Action': ['s3:GetObject'],
+        'Resource': "arn:aws:s3:::%s/*" % bucket_name,
+        'Condition': {
+                'IpAddress': {
+                    'aws:SourceIp': [
+                        '87.237.186.182/32',
+                        '85.233.221.121/32',
+                        currentIp
+                    ]
+                }
+            }
+      }]
+    }
+
+    # Convert the policy to a JSON string
+    bucket_policy = json.dumps(bucket_policy)
+
+    # Set the new policy on the given bucket
+    s3.put_bucket_policy(Bucket=bucket_name, Policy=bucket_policy)
+    print(date + " - Bucket Policy of: " +bucket_name+ " was successfully updated")
+  else:
+    print(date + " - Current IP: " +currentIp+ " is equal to old IP: " +oldIp+ ". Nothing to do with the S3 bucket policy.")
+    
+except BotoClientError:
+		print(date + " - Malformed Bucket:", bucket_name)
 		exit(1)
 exit(0)
