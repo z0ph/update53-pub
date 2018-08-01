@@ -23,7 +23,7 @@ def getIp():
 	return(get(('http://ipinfo.io')).json()['ip'])
 
 # Arguements Parser
-parser = argparse.ArgumentParser(description="Update your AWS Route53 A record with your new IP address")
+parser = argparse.ArgumentParser(description="Update your AWS Route53 A record and S3 Bucket Policy with your new public IP address")
 parser._action_groups.pop()
 required = parser.add_argument_group('required arguments')
 optional = parser.add_argument_group('optional arguments')
@@ -33,7 +33,7 @@ required.add_argument('id', help='AWS Route53\'s hosted-zone-id hosting your A r
 required.add_argument('dns', help='AWS Route53\'s A record you want to update')
 
 # Optional args
-optional.add_argument('bucket', help='S3 Bucket to update permissions (Bucket Policy)')
+optional.add_argument('-b','--b','-bucket','--bucket', dest='bucket', help='S3 Bucket Name to update permissions (Bucket Policy)')
 optional.add_argument('-v', '--version', action='version', version="%(prog)s - "+ __version__ +"")
 
 args = vars(parser.parse_args())
@@ -111,7 +111,7 @@ try:
     print(date + " - Current IP: " +currentIp+ " is equal to old IP: " +oldIp+ ". Nothing to do with Route53.")
   
 except BotoClientError:
-		print(date + " - Malformed IP:", currentIp)
+		print(date + " - Malformed IP Address:", currentIp)
 		exit(1)
 
 # Try to update bucket policy
@@ -131,9 +131,7 @@ try:
         'Condition': {
                 'IpAddress': {
                     'aws:SourceIp': [
-                        '87.237.186.182/32',
-                        '85.233.221.121/32',
-                        currentIp
+                        ''+ currentIp + '/32'
                     ]
                 }
             }
@@ -145,11 +143,11 @@ try:
 
     # Set the new policy on the given bucket
     s3.put_bucket_policy(Bucket=bucket_name, Policy=bucket_policy)
-    print(date + " - Bucket Policy of: " +bucket_name+ " was successfully updated")
+    print(date + " - Bucket Policy of S3 Bucket: " +bucket_name+ " was successfully updated")
   else:
     print(date + " - Current IP: " +currentIp+ " is equal to old IP: " +oldIp+ ". Nothing to do with the S3 bucket policy.")
     
 except BotoClientError:
-		print(date + " - Malformed Bucket:", bucket_name)
+		print(date + " - Malformed Bucket Name:", bucket_name)
 		exit(1)
 exit(0)
