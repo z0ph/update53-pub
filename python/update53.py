@@ -20,7 +20,7 @@ def getIp():
 	'''Simple function to get your ip, using ipinfo.co
 	API and JSON and then update your AWS Route53 DNS A Record'''
 
-	return(get(('http://ipinfo.io')).json()['ip'])
+	return(get(('https://ipinfo.io')).json()['ip'])
 
 # Arguements Parser
 parser = argparse.ArgumentParser(description="Update your AWS Route53 A record and S3 Bucket Policy with your new public IP address")
