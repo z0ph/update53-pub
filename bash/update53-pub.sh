@@ -6,7 +6,7 @@
 MYJSONPATH=/home/osmc/update53-pub
 
 # Check current public IP using ifconfig.co webservice (forced ipv4)
-IP=$( curl -s https://v4.ifconfig.co/ )
+IP=$( curl -s4 https://ifconfig.co/ )
 
 # Check configured domain to be updated
 MYDOM=$( cat $MYJSONPATH/config.json|grep "Name"|awk -F : '{print  $2}'|tr -d '", ' )
