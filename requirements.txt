@@ -1,0 +1,4 @@
+argparse == 1.2.1
+awscli == 1.15.35
+boto3 == 1.7.35
+botocore == 1.10.35
