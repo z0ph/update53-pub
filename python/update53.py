@@ -20,7 +20,7 @@ def getIp():
 	'''Simple function to get your ip, using ipinfo.co
 	API and JSON and then update your AWS Route53 DNS A Record'''
 
-	return(get(('http://ipinfo.io')).json()['ip'])
+	return(get(('https://ipinfo.io')).json()['ip'])
 
 # Arguements Parser
 parser = argparse.ArgumentParser(description="Update your AWS Route53 A record and S3 Bucket Policy with your new public IP address")
@@ -49,6 +49,7 @@ if not args['dns']:
 
 # Variables
 r53 = boto3.client('route53')
+sns = boto3.client('sns')
 hostedZoneId = args['id']
 currentIp = getIp()
 date = datetime.datetime.now().strftime("%d-%m-%y-%H:%M")
@@ -83,7 +84,7 @@ oldIp = record['ResourceRecordSets'][0]['ResourceRecords'][0]['Value']
 # Try to update route53
 try:
   if oldIp != currentIp:
-
+    message = {"Update53 - New IP set to": currentIp}
     input = r53.change_resource_record_sets(
       HostedZoneId=hostedZoneId,
       ChangeBatch={
@@ -105,7 +106,14 @@ try:
               ]
       }
   )
-    print(date + " - Current IP: " +currentIp+ " was successfully updated to Route53")
+    print(date + " - Current IP: " +currentIp+ " was successfully updated to Route53. Old was: " + oldIp)
+    
+    # Publish Alert to sns topic if ip change
+    response = sns.publish(
+      TargetArn='arn:aws:sns:eu-west-1:567589703415:Alert-me',
+      Message=json.dumps({'default': json.dumps(message)}),
+      MessageStructure='json'
+    )
     
   else:
     print(date + " - Current IP: " +currentIp+ " is equal to old IP: " +oldIp+ ". Nothing to do with Route53.")
