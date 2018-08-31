@@ -8,6 +8,7 @@ Features:
 
 - AWS SDK for Python - [boto3](https://github.com/boto/boto3)
 - IAM User with AccessKey/SecretKey
+- SNS Topic (Alerting)
 
 ## Installation
 
@@ -16,6 +17,7 @@ This version allow you to update your AWS route53 record from your current publi
 - `git clone https://github.com/z0ph/update53-pub.git`
 - Create your AWS Route 53 Zone first, then create your DNS A Record to update (home.example.com)
 - Configure your server with AWS CLI : `aws configure` with your Access Key ID and Secret Access ID
+- Setup your SNS ARN on line [113](https://github.com/z0ph/update53-pub/blob/master/python/update53.py#L113)
 
 ## Usage
 
