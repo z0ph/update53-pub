@@ -6,9 +6,10 @@ Features:
 
 ## Requierements
 
-- AWS SDK for Python - [boto3](https://github.com/boto/boto3)
-- IAM User with AccessKey/SecretKey
+- AWS SDK for Python - [boto3](https://github.com/boto/boto3) `sudo pip install boto3`
+- IAM User with AccessKey/SecretKey or IAM Role attached to an EC2 instance
 - SNS Topic (Alerting)
+- Run `aws configure` to setup region and AK/SK
 
 ## Installation
 
