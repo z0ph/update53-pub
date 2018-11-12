@@ -3,8 +3,9 @@
 This version allow you to update your AWS route53 record from your current public ip (from [ipinfo.io](https://ipinfo.io/) WebService)
 
 **Features:**
+
 - Update AWS Route53 DNS Record with your current public IP (Usefull for home ISP with non-static IP address)
-- Send SNS Notification when your ip change
+- Optional - Send SNS Notification when your ip change
 - Optional - Update the bucket policy of a S3 bucket to only autorize access to this bucket from your public IP (Usefull for private static web hosting)
 
 ## Requierements
@@ -14,7 +15,7 @@ This version allow you to update your AWS route53 record from your current publi
 - SNS Topic (Alerting purpose)
 - Run `aws configure` to setup at least the region and your AK/SK
 
-	$ cd python 
+	$ cd python
 	$ sudo pip install -r requirements.txt
 
 ## Installation
@@ -24,16 +25,14 @@ This version allow you to update your AWS route53 record from your current publi
 
 	$ git clone https://github.com/z0ph/update53-pub.git
 
-- Setup your SNS ARN on line [113](https://github.com/z0ph/update53-pub/blob/master/python/update53.py#L113) in update53.py
-
 ## Usage
 
 	$ python update53.py [YOUR_HOSTED_ZONE_ID] [YOUR_DNS] -b [YOUR_BUCKET_NAME]
 
 ### Optinal
 
-`-b [YOUR_BUCKET_NAME]`     Use this option to change your bucket policy to only allow your new IP: `"Action": "s3:GetObject"`
-
+- Use this option to change your bucket policy to only allow your new IP: `"Action": "s3:GetObject"` `-b [YOUR_BUCKET_NAME]`
+- Setup your SNS ARN on line [113](https://github.com/z0ph/update53-pub/blob/master/python/update53.py#L113) in update53.py
 
 ### Example of the Bucket Policy
 
@@ -57,21 +56,20 @@ This version allow you to update your AWS route53 record from your current publi
         }
     ]
 }
-
 ```
 
 #### Example with only Route53
 
 Run `python update53.py ZLJT68NZ2IYSF home.example.com`
 
-#### Example with S3 Bucket 
+#### Example with S3 Bucket
 
 Run `python update53.py ZLJT68NZ2IYSF home.example.com -b privatewebsite.example.com`
 
 ## Automation
 
 - Schedule this script with cron to update record on a daily basis for example.
-- `crontab -e` to schedule your job : 
+- `crontab -e` to schedule your job :
 
 `0 * * * * python /home/user/update53-pub/update53.py ZLJT68NZ2IYSF home.example.com`
 
