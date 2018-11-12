@@ -119,7 +119,7 @@ try:
     print(date + " - Current IP: " +currentIp+ " is equal to old IP: " +oldIp+ ". Nothing to do with Route53.")
   
 except BotoClientError:
-		print(date + " - Malformed IP Address:", currentIp)
+		print(date + " - Malformed IP Address:", oldIp)
 		exit(1)
 
 # Try to update bucket policy
