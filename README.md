@@ -15,19 +15,19 @@ This version allow you to update your AWS route53 record from your current publi
 - SNS Topic (Alerting purpose)
 - Run `aws configure` to setup at least the region and your AK/SK
 
-	$ cd python
-	$ sudo pip install -r requirements.txt
+	    $ cd python
+	    $ sudo pip install -r requirements.txt
 
 ## Installation
 
 - Create your AWS Route 53 Zone first, then create your DNS A Record to update (home.example.com)
 - Configure your server with AWS CLI : `aws configure` with your AccessKey ID and SecretAccess ID
 
-	$ git clone https://github.com/z0ph/update53-pub.git
+	    $ git clone https://github.com/z0ph/update53-pub.git
 
 ## Usage
 
-	$ python update53.py [YOUR_HOSTED_ZONE_ID] [YOUR_DNS] -b [YOUR_BUCKET_NAME]
+	    $ python update53.py [YOUR_HOSTED_ZONE_ID] [YOUR_DNS] -b [YOUR_BUCKET_NAME]
 
 ### Optinal
 
