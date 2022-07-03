@@ -163,7 +163,7 @@ except BotoClientError as e:
 
 # Try to update bucket policy
 try:
-    if not args["-b"]:
+    if not args["bucket"]:
         logging.info("No bucket option used")
         pass
     else:
