@@ -1,10 +1,10 @@
-# update53 - DynDNS with AWS Route53
+# update53 - DynDNS with Amazon Route53
 
-This version allow you to update your AWS Route53 record by your current public ip (from [ipinfo.io](https://ipinfo.io/) web service)
+This version allow you to update your Amazon Route53 record by your current public ip (from [ipinfo.io](https://ipinfo.io/) web service)
 
 **Features:**
 
-- Update AWS Route53 DNS Record with your current public IP (Useful for home ISP with non-static IP address)
+- Update Amazon Route53 DNS Record with your current public IP (Useful for home ISP with non-static IP address)
 - Optional - Send SNS Notification when your ip change
 - Optional - Update the bucket policy of a S3 bucket to only authorize access to this bucket from your public IP (Useful for private static web hosting)
 
@@ -17,8 +17,8 @@ This version allow you to update your AWS Route53 record by your current public 
 
 ## Installation
 
-- Create your AWS Route 53 Zone first, then create your DNS A Record to update (`home.example.com`)
-- Configure your server with AWS CLI : `aws configure` with your AccessKey ID and SecretAccess ID
+- Create your Amazon Route 53 Zone first, then create your DNS A Record to update (`home.example.com`)
+- Configure your server with AWS CLI : `aws configure` with your `AccessKey` and `SecretKey`
 
         $ git clone https://github.com/z0ph/update53-pub.git
         $ cd update53-pub/python/
@@ -26,7 +26,7 @@ This version allow you to update your AWS Route53 record by your current public 
 
 ## Usage
 
-        $ python update53.py [YOUR_HOSTED_ZONE_ID] [YOUR_DNS] -b [YOUR_BUCKET_NAME]
+        $ python3 update53.py [YOUR_HOSTED_ZONE_ID] [YOUR_DNS] -b [YOUR_BUCKET_NAME]
 
 ### Optional
 

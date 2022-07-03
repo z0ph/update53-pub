@@ -28,22 +28,30 @@ logging.basicConfig(
 # GetIp Fonction
 def getIp():
     """Simple function to get your ip, using ipinfo.co
-    API and JSON and then update your AWS Route53 DNS A Record"""
+    API and JSON and then update your Amazon Route53 DNS A Record"""
+    try:
+        currentIp = get(("https://ipinfo.io")).json()["ip"]
+    except Exception as e:
+        logging.error(
+            "Error while trying to get the current IP address from ipinfo.io: %s", e
+        )
 
-    return get(("https://ipinfo.io")).json()["ip"]
+    return currentIp
 
 
 # Arguements Parser
 parser = argparse.ArgumentParser(
-    description="Update your AWS Route53 A record and S3 Bucket Policy with your new public IP address"
+    description="Update your Amazon Route53 A record and S3 Bucket Policy with your new public IP address"
 )
 parser._action_groups.pop()
 required = parser.add_argument_group("required arguments")
 optional = parser.add_argument_group("optional arguments")
 
 # Required args
-required.add_argument("id", help="AWS Route53's hosted-zone-id hosting your A record")
-required.add_argument("dns", help="AWS Route53's A record you want to update")
+required.add_argument(
+    "id", help="Amazon Route53's hosted-zone-id hosting your target A record"
+)
+required.add_argument("dns", help="Target Amazon Route53's A record you want to update")
 
 # Optional args
 optional.add_argument(
@@ -83,12 +91,11 @@ try:
     hz = r53.get_hosted_zone(
         Id=hostedZoneId,
     )
-
 except BotoClientError as e:
-    logging.error("Error while trying to check the R53 zone-id: %s", e)
+    logging.error("Error while trying to check the Route 53 zone-id: %s", e)
     exit(1)
 
-# Get old IP from API Call (not a DNS resolution)
+# Get old IP from API Call (its not a DNS resolution)
 try:
     record = r53.list_resource_record_sets(
         HostedZoneId=hostedZoneId,
@@ -128,7 +135,7 @@ try:
             },
         )
         logging.info(
-            "Current IP: %s was successfully updated to R53. Old was: %s",
+            "New IP: %s was successfully updated to R53. Old was: %s",
             currentIp,
             oldIp,
         )
@@ -141,7 +148,7 @@ try:
                 MessageStructure="json",
             )
         except BotoClientError as e:
-            logging.error("Failed to publish message on the SNS Topic: %s", e)
+            logging.error("Failed to publish SNS message: %s", e)
 
     else:
         logging.info(
@@ -156,38 +163,43 @@ except BotoClientError as e:
 
 # Try to update bucket policy
 try:
-    if oldIp != currentIp:
-        s3 = boto3.client("s3")
-        bucket_name = args["bucket"]
-        # Create the bucket policy
-        bucket_policy = {
-            "Version": "2012-10-17",
-            "Statement": [
-                {
-                    "Sid": "AddPerm",
-                    "Effect": "Allow",
-                    "Principal": "*",
-                    "Action": ["s3:GetObject"],
-                    "Resource": "arn:aws:s3:::%s/*" % bucket_name,
-                    "Condition": {
-                        "IpAddress": {"aws:SourceIp": ["" + currentIp + "/32"]}
-                    },
-                }
-            ],
-        }
-
-        # Convert the policy to a JSON string
-        bucket_policy = json.dumps(bucket_policy)
-
-        # Set the new policy on the given bucket
-        s3.put_bucket_policy(Bucket=bucket_name, Policy=bucket_policy)
-        logging.info("Bucket Policy was successfully updated on: %s", bucket_name)
+    if not args["-b"]:
+        logging.info("No bucket option used")
+        pass
     else:
-        logging.info(
-            "Current IP: %s, is equal to old IP: %s, nothing to do with the S3 Bucket.",
-            currentIp,
-            oldIp,
-        )
+        logging.info("bucket option activated")
+        if oldIp != currentIp:
+            s3 = boto3.client("s3")
+            bucket_name = args["bucket"]
+            # Create the bucket policy
+            bucket_policy = {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Sid": "AddPerm",
+                        "Effect": "Allow",
+                        "Principal": "*",
+                        "Action": ["s3:GetObject"],
+                        "Resource": "arn:aws:s3:::%s/*" % bucket_name,
+                        "Condition": {
+                            "IpAddress": {"aws:SourceIp": ["" + currentIp + "/32"]}
+                        },
+                    }
+                ],
+            }
+
+            # Convert the policy to a JSON string
+            bucket_policy = json.dumps(bucket_policy)
+
+            # Set the new policy on the given bucket
+            s3.put_bucket_policy(Bucket=bucket_name, Policy=bucket_policy)
+            logging.info("Bucket Policy was successfully updated on: %s", bucket_name)
+        else:
+            logging.info(
+                "Current IP: %s, is equal to old IP: %s, nothing to do with the S3 Bucket.",
+                currentIp,
+                oldIp,
+            )
 
 except BotoClientError as e:
     logging.error("Failed to update bucket policy: %s", e)
