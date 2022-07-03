@@ -26,12 +26,12 @@ This version allow you to update your Amazon Route53 record by your current publ
 
 ## Usage
 
-        $ python3 update53.py [YOUR_HOSTED_ZONE_ID] [YOUR_DNS] -b [YOUR_BUCKET_NAME]
+        $ python3 update53.py [YOUR_HOSTED_ZONE_ID] [YOUR_DNS]
 
 ### Optional
 
 - Use this option to change your bucket policy to only allow your new IP: `"Action": "s3:GetObject"` `-b [YOUR_BUCKET_NAME]`
-- Setup your SNS ARN on line [113](https://github.com/z0ph/update53-pub/blob/master/python/update53.py#L113) in update53.py
+- Setup your [`sns_topic`](https://github.com/z0ph/update53-pub/blob/master/python/update53.py)
 
 ### Example of the Bucket Policy
 
@@ -57,18 +57,18 @@ This version allow you to update your Amazon Route53 record by your current publ
 
 #### Example with only Route53
 
-Run `python update53.py ZLJT68NZ2IYSF home.example.com`
+Run `python3 update53.py ZLJT68NZ2IYSF home.example.com`
 
 #### Example with S3 Bucket
 
-Run `python update53.py ZLJT68NZ2IYSF home.example.com -b privatewebsite.example.com`
+Run `python3 update53.py ZLJT68NZ2IYSF home.example.com -b privatewebsite.example.com`
 
 ## Automation
 
 - Schedule this script with cron to update record on a daily basis for example.
 - `crontab -e` to schedule your job :
 
-`0 * * * * python /home/user/update53-pub/update53.py ZLJT68NZ2IYSF home.example.com`
+`0 * * * * python3 /home/user/update53-pub/python/update53.py ZLJT68NZ2IYSF home.example.com`
 
 ## Credits
 
