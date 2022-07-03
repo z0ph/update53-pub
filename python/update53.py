@@ -164,10 +164,10 @@ except BotoClientError as e:
 # Try to update bucket policy
 try:
     if not args["bucket"]:
-        logging.info("No bucket option used")
+        logging.info("No S3 bucket option activated")
         pass
     else:
-        logging.info("bucket option activated")
+        logging.info("S3 bucket option activated")
         if oldIp != currentIp:
             s3 = boto3.client("s3")
             bucket_name = args["bucket"]
@@ -193,7 +193,7 @@ try:
 
             # Set the new policy on the given bucket
             s3.put_bucket_policy(Bucket=bucket_name, Policy=bucket_policy)
-            logging.info("Bucket Policy was successfully updated on: %s", bucket_name)
+            logging.info("S3 Bucket policy was successfully updated on: %s", bucket_name)
         else:
             logging.info(
                 "Current IP: %s, is equal to old IP: %s, nothing to do with the S3 Bucket.",
