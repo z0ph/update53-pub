@@ -20,13 +20,13 @@ This version allow you to update your AWS Route53 record by your current public 
 - Create your AWS Route 53 Zone first, then create your DNS A Record to update (`home.example.com`)
 - Configure your server with AWS CLI : `aws configure` with your AccessKey ID and SecretAccess ID
 
-	    $ git clone https://github.com/z0ph/update53-pub.git
+        $ git clone https://github.com/z0ph/update53-pub.git
         $ cd update53-pub/python/
         $ sudo pip install -r requirements.txt
 
 ## Usage
 
-	    $ python update53.py [YOUR_HOSTED_ZONE_ID] [YOUR_DNS] -b [YOUR_BUCKET_NAME]
+        $ python update53.py [YOUR_HOSTED_ZONE_ID] [YOUR_DNS] -b [YOUR_BUCKET_NAME]
 
 ### Optional
 
@@ -37,23 +37,21 @@ This version allow you to update your AWS Route53 record by your current public 
 
 ```json
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "AddPerm",
-            "Effect": "Allow",
-            "Principal": "*",
-            "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::draft.zoph.me/*",
-            "Condition": {
-                "IpAddress": {
-                    "aws:SourceIp": [
-                        "130.211.YY.XXX/32"
-                    ]
-                }
-            }
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AddPerm",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::draft.zoph.me/*",
+      "Condition": {
+        "IpAddress": {
+          "aws:SourceIp": ["130.211.YY.XXX/32"]
         }
-    ]
+      }
+    }
+  ]
 }
 ```
 
@@ -74,5 +72,6 @@ Run `python update53.py ZLJT68NZ2IYSF home.example.com -b privatewebsite.example
 
 ## Credits
 
-Adaptation from: 
+Adaptation from:
+
 - [Lambros Petrou](https://www.lambrospetrou.com/articles/aws-update-route53-recordset-diy-load-balancer/)
