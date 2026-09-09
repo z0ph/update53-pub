@@ -10,7 +10,8 @@ This version allow you to update your Amazon Route53 record by your current publ
 
 ## Requirements
 
-- AWS SDK for Python - [boto3](https://github.com/boto/boto3) `sudo pip install boto3`
+- Python 3.10+
+- AWS SDK for Python ([boto3](https://github.com/boto/boto3)), [requests](https://pypi.org/project/requests/), and AWS CLI v1 (`aws configure`) — installed from `python/requirements.txt`
 - IAM Role attached to your EC2 instance or IAM User with AccessKey/SecretKey
 - SNS Topic (Alerting purpose)
 - Run `aws configure` to setup at least the region and your AK/SK
